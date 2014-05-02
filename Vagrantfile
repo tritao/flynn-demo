@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Fix for https://github.com/flynn/flynn/issues/13
     echo 3600 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_close_wait
 
-    docker run -d -v=/var/run/docker.sock:/var/run/docker.sock -p=1113:1113 flynn/host -external 10.0.2.15 -force
+    first=$(docker run -d -v=/var/run/docker.sock:/var/run/docker.sock -p=1113:1113 flynn/host -external 10.0.2.15 -force)
     docker pull flynn/postgres
     docker pull flynn/controller
     docker pull flynn/gitreceive
@@ -31,6 +31,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     docker pull flynn/shelf
     docker pull flynn/slugrunner
     docker pull flynn/slugbuilder
+
+    docker run -e=DISCOVERD=10.0.2.15:1111 flynn/bootstrap
+
+    docker kill $first
+    docker run -d -v=/var/run/docker.sock:/var/run/docker.sock -p=1113:1113 flynn/host -external 10.0.2.15 -force
+
+    sleep 10
 
     docker run -e=DISCOVERD=10.0.2.15:1111 flynn/bootstrap
 SCRIPT
