@@ -2,7 +2,7 @@
 
 This repository contains Packer templates for building machine images
 that represent the expected Ubuntu target system for Flynn. This is essentially
-a stock image of Ubuntu 12.04 that is Docker-ready, which involves upgrading the
+a stock image of Ubuntu 14.04 that is Docker-ready, which involves upgrading the
 kernel and adding the Docker package repos.
 
 ## Usage
